@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Add a Blog Entry</h1>
+    <!--  form action needs to match the url you want it to go to after submit -->
+    <form method='POST'>
+        <label>
+            <span class="form_label">Title for your new blog:</span>
+            <input name="blog_title" type="text">
+        </label>
+        <p class="error">{{title_error}} &nbsp;</p>
+        <label>
+            <span class="form_label">Your new blog:</span>
+            <input name="blog_post" type="text">
+        </label>
+        <p class="error">{{blog_entry_error}} &nbsp;</p>
+        <input class="submit" type="submit" value="Add Entry" />
+    </form>
+
+<hr>
+    
+<h1>Build a Blog</h1>
+
+    <div>
+            {% for blog in posts %}
+            <h2>{{blog.title}}</h2>
+            <p>{{blog.post}}</p>
+            <hr>
+            {% endfor %}
+    </div>
+    
+
+{% endblock %} 
+
