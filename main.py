@@ -59,6 +59,8 @@ def add_entry():
     title_error = ""
     blog_entry_error = ""
 
+    # REDIRECTS TO MAIN BLOG PAGE UPON SUCCESS
+
     if empty_val(post_title) and empty_val(post_entry):
 
         if request.method == 'POST':
@@ -71,8 +73,20 @@ def add_entry():
 
             return redirect('/blog')
 
+    # RELOADS FORM UPON ERRORS
+
     else:
-        return render_template('new_post.html')
+        if not empty_val(post_title) and not empty_val(post_entry):
+            title_error = "Please enter text for blog title"
+            blog_entry_error = "Please enter text for blog entry"
+            return render_template('new_post.html', blog_entry_error=blog_entry_error, title_error=title_error)
+        elif not empty_val(post_title):
+            title_error = "Please enter text for blog title"
+            return render_template('new_post.html', title_error=title_error, post_entry=post_entry)
+        elif not empty_val(post_entry):
+            blog_entry_error = "Please enter text for blog entry"
+            return render_template('new_post.html', blog_entry_error=blog_entry_error, post_title=post_title)
+        
 
 # only runs when the main.py file run directly
 if __name__ == '__main__':
