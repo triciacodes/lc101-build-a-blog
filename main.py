@@ -21,27 +21,58 @@ class Blog(db.Model):
         self.title = title
         self.post = post 
 
-@app.route('/blog', methods=['POST', 'GET'])
+# DISPLAYS ALL BLOG POSTS
+
+@app.route('/blog')
 def index():
 
-    
-    thing = "Whatevs"
-
-    if request.method == 'POST':
-        post_title = request.form['blog_title']
-        post_entry = request.form['blog_post']
-        post_new = Blog(post_title, post_entry)
-        
-        db.session.add(post_new)
-        db.session.commit()
-
     all_blog_posts = Blog.query.all()
-    # first of the pair matches to {{}} in the .html template, second of the pair matches names as listed above
+    # first of the pair matches to {{}} in for loop in the .html template, second of the pair matches to variable declared above
     return render_template('blog.html', posts=all_blog_posts)
 
+# DISPLAYS NEW BLOG ENTRY FORM
+
 @app.route('/newpost')
-def add_entry():
+def blog_entry_form():
     return render_template('new_post.html')
+
+# VALIDATION FOR EMPTY FORM
+
+def empty_val(x):
+    if x:
+        return True
+    else:
+        return False
+
+# THIS HANDLES THE REDIRECT (SUCCESS) AND ERROR MESSAGES (FAILURE)
+
+@app.route('/newpost', methods=['POST', 'GET'])
+def add_entry():
+
+    # THIS CREATES VARIABLES WITH FORM INPUTS
+
+    post_title = request.form['blog_title']
+    post_entry = request.form['blog_post']
+
+    # THIS CREATES EMPTY STRINGS FOR THE ERROR MESSAGES
+
+    title_error = ""
+    blog_entry_error = ""
+
+    if empty_val(post_title) and empty_val(post_entry):
+
+        if request.method == 'POST':
+            post_title = request.form['blog_title']
+            post_entry = request.form['blog_post']
+            post_new = Blog(post_title, post_entry)
+                
+            db.session.add(post_new)
+            db.session.commit()
+
+            return redirect('/blog')
+
+    else:
+        return render_template('new_post.html')
 
 # only runs when the main.py file run directly
 if __name__ == '__main__':
