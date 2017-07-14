@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:build-a-bl
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
-# creating a persistent class
+# creating a persistent class for the database
 class Blog(db.Model):
 
     # specify the data fields that should go into columns
@@ -30,12 +30,6 @@ def index():
     # first of the pair matches to {{}} in for loop in the .html template, second of the pair matches to variable declared above
     return render_template('blog.html', posts=all_blog_posts)
 
-# DISPLAYS NEW BLOG ENTRY FORM
-
-@app.route('/newpost')
-def blog_entry_form():
-    return render_template('new_post.html')
-
 # VALIDATION FOR EMPTY FORM
 
 def empty_val(x):
@@ -43,6 +37,12 @@ def empty_val(x):
         return True
     else:
         return False
+
+# DISPLAYS NEW BLOG ENTRY FORM
+
+@app.route('/newpost')
+def blog_entry_form():
+    return render_template('new_post.html')
 
 # THIS HANDLES THE REDIRECT (SUCCESS) AND ERROR MESSAGES (FAILURE)
 
